@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h1>{{ title }}</h1>
+<p class="sub">Xin chào {{ g.user.full_name }}. Đăng nhập thành công với vai trò {{ ROLE_LABEL[g.user.role] }}.</p>
+<div class="panel">
+  <p style="margin-top:0"><b>Các chức năng của giao diện này sẽ được gắn vào đây:</b></p>
+  <ul>{% for i in items %}<li>{{ i }}</li>{% endfor %}</ul>
+</div>
+{% endblock %}

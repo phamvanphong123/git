@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Đăng nhập{% endblock %}
+{% block head %}<style>
+.login{max-width:400px;margin:56px auto 0}
+.login form{display:grid;gap:14px;margin-top:16px}
+.hint{margin-top:18px;font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+</style>{% endblock %}
+{% block content %}
+<div class="login panel">
+  <h1>Đăng nhập</h1>
+  <p class="sub">Dùng email công ty để xem và đăng ký sự kiện.</p>
+  {% if error %}<div class="alert" role="alert">{{ error }}</div>{% endif %}
+  <form method="post" novalidate>
+    <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+    <div><label for="email">Email công ty</label>
+      <input id="email" name="email" type="email" value="{{ email }}" autocomplete="username" placeholder="ten@xyz.com" required autofocus></div>
+    <div><label for="password">Mật khẩu</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required></div>
+    <button type="submit">Đăng nhập</button>
+  </form>
+  <p class="hint">Tài khoản demo (mật khẩu <b>Employee@123</b>): employee@xyz.com, organizer@xyz.com, admin@xyz.com</p>
+</div>
+{% endblock %}

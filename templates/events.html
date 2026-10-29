@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Danh sách sự kiện{% endblock %}
+{% block head %}<style>
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr 1.3fr 1.3fr;gap:12px;align-items:end}
+.actions{display:flex;gap:8px;margin-top:12px}
+.tablewrap{overflow-x:auto;margin-top:16px}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap}
+td.name{white-space:normal;min-width:200px}
+td.name small{display:block;color:var(--muted)}
+th{background:#eef1f4;font-size:13px}
+td.num,th.num{text-align:right}
+.chip{display:inline-block;padding:2px 10px;border-radius:999px;font-size:13px;font-weight:600}
+.chip.open{background:var(--ok-bg);color:var(--ok)}
+.chip.full,.chip.closed{background:var(--warn-bg);color:var(--warn)}
+.chip.cancelled{background:var(--bad-bg);color:var(--bad)}
+.chip.ended{background:var(--grey-bg);color:var(--muted)}
+.empty{padding:32px;text-align:center;color:var(--muted)}
+.count{color:var(--muted);margin:16px 0 0;font-size:14px}
+@media (max-width:860px){.filters{grid-template-columns:1fr 1fr}}
+</style>{% endblock %}
+{% block content %}
+<h1>Danh sách sự kiện</h1>
+<p class="sub">Tìm sự kiện phù hợp rồi xem thông tin trước khi đăng ký.</p>
+{% for e in errors %}<div class="alert" role="alert">{{ e }}</div>{% endfor %}
+<form class="panel" method="get" action="{{ url_for('employee_home') }}">
+  <div class="filters">
+    <div><label for="q">Tên sự kiện</label><input id="q" name="q" value="{{ f.q }}" maxlength="100" placeholder="Ví dụ: Workshop"></div>
+    <div><label for="from">Từ ngày</label><input id="from" name="from" type="date" value="{{ f['from'] }}"></div>
+    <div><label for="to">Đến ngày</label><input id="to" name="to" type="date" value="{{ f.to }}"></div>
+    <div><label for="dept">Phòng ban tổ chức</label>
+      <select id="dept" name="dept"><option value="">Tất cả</option>
+      {% for d in departments %}<option value="{{ d.id }}" {{ 'selected' if f.dept == d.id|string }}>{{ d.name }}</option>{% endfor %}</select></div>
+    <div><label for="status">Trạng thái</label>
+      <select id="status" name="status"><option value="">Tất cả</option>
+      {% for s in statuses %}<option {{ 'selected' if f.status == s }}>{{ s }}</option>{% endfor %}</select></div>
+  </div>
+  <div class="actions">
+    <button type="submit">Tìm kiếm</button>
+    {% if filtering %}<a class="btn ghost" href="{{ url_for('employee_home') }}">Xóa bộ lọc</a>{% endif %}
+  </div>
+</form>
+<p class="count">{{ events|length }} sự kiện{{ ' phù hợp' if filtering }}</p>
+<div class="tablewrap">
+{% if events %}
+<table>
+  <thead><tr><th>Tên sự kiện</th><th>Thời gian</th><th>Địa điểm</th><th>Người tổ chức</th>
+  <th class="num">Số lượng tối đa</th><th class="num">Đã đăng ký</th><th>Trạng thái</th></tr></thead>
+  <tbody>
+  {% for e in events %}
+  <tr>
+    <td class="name"><b>{{ e.name }}</b>{% if e.description %}<small>{{ e.description }}</small>{% endif %}</td>
+    <td>{{ e.start_time|vn_time }}</td><td>{{ e.location }}</td><td>{{ e.dept }}</td>
+    <td class="num">{{ e.max_participants }}</td><td class="num">{{ e.registered }}</td>
+    <td><span class="chip {{ e.css }}">{{ e.state }}</span></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="panel empty">
+  {% if filtering %}Không có sự kiện nào khớp với bộ lọc. Hãy đổi từ khóa hoặc bỏ bớt điều kiện lọc.
+  {% else %}Chưa có sự kiện nào. Hãy quay lại sau khi người tổ chức tạo sự kiện.{% endif %}
+</div>
+{% endif %}
+</div>
+{% endblock %}

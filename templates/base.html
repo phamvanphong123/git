@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Sự kiện nội bộ{% endblock %} – Công ty XYZ</title>
+<style>
+:root{--ink:#17212b;--muted:#5d6b78;--line:#d9dfe5;--bg:#f3f5f7;--card:#fff;--accent:#0b5cad;--accent-d:#094a8c;
+--ok:#12703e;--ok-bg:#e1f3e8;--warn:#8a5a00;--warn-bg:#fdf0d2;--bad:#a12a2a;--bad-bg:#fbe4e4;--grey-bg:#e8ebee}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--accent)}
+header.top{background:var(--card);border-bottom:1px solid var(--line)}
+.bar{max-width:1120px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-weight:700;font-size:17px;margin-right:auto}
+.who{color:var(--muted);font-size:14px}
+main{max-width:1120px;margin:0 auto;padding:24px 20px 48px}
+h1{font-size:24px;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 20px}
+button,.btn{font:inherit;border:1px solid var(--accent);background:var(--accent);color:#fff;padding:8px 16px;border-radius:6px;cursor:pointer;text-decoration:none;display:inline-block}
+button:hover,.btn:hover{background:var(--accent-d)}
+button.ghost,.btn.ghost{background:#fff;color:var(--accent)}
+button.ghost:hover,.btn.ghost:hover{background:#eef4fb}
+:focus-visible{outline:3px solid #7fb2e8;outline-offset:2px}
+input,select{font:inherit;padding:8px 10px;border:1px solid #b9c2cb;border-radius:6px;background:#fff;color:var(--ink);width:100%}
+label{display:block;font-size:13px;font-weight:600;margin-bottom:4px}
+.alert{padding:10px 14px;border-radius:6px;background:var(--bad-bg);color:var(--bad);border:1px solid #efc0c0;margin-bottom:16px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+{% block head %}{% endblock %}
+</head>
+<body>
+<header class="top"><div class="bar">
+  <span class="brand">Sự kiện nội bộ XYZ</span>
+  {% if g.user %}
+  <span class="who">{{ g.user.full_name }} · {{ g.user.dept }} · {{ ROLE_LABEL[g.user.role] }}</span>
+  <form method="post" action="{{ url_for('logout') }}">
+    <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+    <button class="ghost" type="submit">Đăng xuất</button>
+  </form>
+  {% endif %}
+</div></header>
+<main>{% block content %}{% endblock %}</main>
+</body>
+</html>
